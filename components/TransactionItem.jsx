@@ -1,15 +1,21 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-export default function TransactionItem({ type, sum, date }) {
+function TransactionItem({ type, sum, date }) {
   return (
-    <View style={styles.item}>
+    <Animated.View
+      style={styles.item}
+      entering={FadeInUp.duration(400)} // анімація входу
+    >
       <Text style={styles.type}>{type}</Text>
       <Text style={styles.sum}>${sum}</Text>
       <Text style={styles.date}>{date}</Text>
-    </View>
+    </Animated.View>
   );
 }
+
+export default React.memo(TransactionItem);
 
 const styles = StyleSheet.create({
   item: {

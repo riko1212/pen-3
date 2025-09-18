@@ -1,22 +1,30 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import CategoryItem from './CategoryItem';
 
-export default function Sidebar({ username, categories, onAddCategory }) {
+function Sidebar({ username, categories, onAddCategory }) {
+  // стабільна функція, щоб не створювалась заново на кожен ререндер
+  const renderItem = useCallback(
+    ({ item }) => (
+      <CategoryItem title={item} onAdd={() => onAddCategory(item)} />
+    ),
+    [onAddCategory]
+  );
+
   return (
     <View style={styles.sidebar}>
       <Text style={styles.logo}>PennyWise</Text>
       <Text style={styles.welcome}>Welcome, {username}!</Text>
       <FlatList
         data={categories}
-        renderItem={({ item }) => (
-          <CategoryItem title={item} onAdd={() => onAddCategory(item)} />
-        )}
+        renderItem={renderItem}
         keyExtractor={(item, idx) => idx.toString()}
       />
     </View>
   );
 }
+
+export default React.memo(Sidebar); // мемоізація всього компонента
 
 const styles = StyleSheet.create({
   sidebar: {
